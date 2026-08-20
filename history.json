@@ -1,5 +1,12 @@
 ﻿[
     {
+        "version":  "7.1.1",
+        "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_7.1.1_x64.exe",
+        "sha256":  "83705A0BD7DDB4AC5BCF4BAF599EDF64E2D4377C78B3FC323227139B7D1D0C7E",
+        "notes":  "Progress reconciliation, full academic reset, and Auto Schedule clarity",
+        "publishedAt":  "2026-08-20T19:39:24.8620569Z"
+    },
+    {
         "version":  "7.1.0",
         "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_7.1.0_x64.exe",
         "sha256":  "5574F71360F729E10600B2164693F81CFB9765C5BF018015218A0D6334C17FE4",
