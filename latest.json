@@ -1,7 +1,7 @@
 ﻿{
     "schema":  1,
-    "version":  "6.3.3",
-    "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_6.3.3_x64.exe",
-    "sha256":  "BA03BF4FBB2A55086221F55434D85A586082B68F8AB659FD2C8A5F6D8158589B",
-    "notes":  "Degree Planner v6.3.3"
+    "version":  "6.3.4",
+    "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_6.3.4_x64.exe",
+    "sha256":  "5EE906D0CB91E04E14E667543D14B75FEF8E29914432E7E471CD573BC2EB3A5C",
+    "notes":  "Degree Planner v6.3.4"
 }
