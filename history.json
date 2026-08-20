@@ -1,5 +1,12 @@
 ﻿[
     {
+        "version":  "7.1.0",
+        "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_7.1.0_x64.exe",
+        "sha256":  "5574F71360F729E10600B2164693F81CFB9765C5BF018015218A0D6334C17FE4",
+        "notes":  "Degree-scoped Auto Schedule, Liberty semesters, overload planning, and taskbar minimize behavior",
+        "publishedAt":  "2026-08-20T19:08:56.1520750Z"
+    },
+    {
         "version":  "7.0.0",
         "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_7.0.0_x64.exe",
         "sha256":  "67EAD090D0B85801565272EECEE8F52E8DE87EAEA8C52F0E0055EFE43861F980",
