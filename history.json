@@ -1,0 +1,16 @@
+﻿[
+    {
+        "version":  "7.0.0",
+        "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_7.0.0_x64.exe",
+        "sha256":  "67EAD090D0B85801565272EECEE8F52E8DE87EAEA8C52F0E0055EFE43861F980",
+        "notes":  "Commercial-grade degree planning architecture, Liberty synchronization, and graduation readiness",
+        "publishedAt":  "2026-08-20T18:24:18.0435223Z"
+    },
+    {
+        "version":  "6.4.0",
+        "installerUrl":  "https://raw.githubusercontent.com/dennyhix87087/degreeplanner-updates/main/DegreePlannerSetup_6.4.0_x64.exe",
+        "sha256":  "8D8553F5648AAE6F0F0F3CCEB7685CA06E010F05C8FB9F5F2B7D12CB6F1B7915",
+        "notes":  "Degree Planner v6.4.0",
+        "publishedAt":  "2026-08-20T00:00:00Z"
+    }
+]
