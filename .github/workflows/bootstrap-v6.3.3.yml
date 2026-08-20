@@ -1,0 +1,45 @@
+name: Bootstrap Degree Planner v6.3.3 Update Channel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-v6.3.3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download and verify v6.3.3 artifact
+        shell: powershell
+        env:
+          ARTIFACT_URL: 'https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-89b4-81f7-aa41-1bbabe448877/raw?se=2026-08-20T15%3A52%3A00Z&sp=r&sv=2026-02-06&sr=b&scid=fa7ed9fa-ed0d-59b3-a506-70b3984e5cda&skoid=38550de5-1fab-49d1-9ebb-83af5557cc43&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-20T14%3A26%3A52Z&ske=2026-08-21T14%3A26%3A52Z&sks=b&skv=2026-02-06&sig=e6BdUOUYRIX4EHpkBoFp2v8ZPwY84QAPlO3K2EUWcu4%3D'
+          EXPECTED_SHA256: 'BA03BF4FBB2A55086221F55434D85A586082B68F8AB659FD2C8A5F6D8158589B'
+        run: |
+          $zip = Join-Path $env:RUNNER_TEMP 'DegreePlanner-6.3.3-Windows-x64.zip'
+          $out = Join-Path $env:RUNNER_TEMP 'degreeplanner633'
+          Invoke-WebRequest -Uri $env:ARTIFACT_URL -OutFile $zip -UseBasicParsing
+          Expand-Archive -Path $zip -DestinationPath $out -Force
+          $setup = Join-Path $out 'DegreePlannerSetup_6.3.3_x64.exe'
+          $manifest = Join-Path $out 'latest.json'
+          if(-not (Test-Path $setup)){ throw 'Setup EXE missing from downloaded artifact.' }
+          if(-not (Test-Path $manifest)){ throw 'latest.json missing from downloaded artifact.' }
+          $actual = (Get-FileHash $setup -Algorithm SHA256).Hash
+          if($actual -ne $env:EXPECTED_SHA256){ throw "SHA-256 mismatch. Expected $env:EXPECTED_SHA256, got $actual" }
+          Copy-Item $setup '.\DegreePlannerSetup_6.3.3_x64.exe' -Force
+          Copy-Item $manifest '.\latest.json' -Force
+          Write-Host "Verified DegreePlannerSetup_6.3.3_x64.exe SHA-256: $actual"
+      - name: Publish verified update files
+        shell: powershell
+        run: |
+          git config user.name 'Degree Planner Update Publisher'
+          git config user.email 'actions@github.com'
+          git add DegreePlannerSetup_6.3.3_x64.exe latest.json
+          if(git diff --cached --quiet){ Write-Host 'Update files already published.'; exit 0 }
+          git commit -m 'Publish Degree Planner v6.3.3 update'
+          git push
