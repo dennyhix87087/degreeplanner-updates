@@ -1,0 +1,46 @@
+name: Publish Degree Planner v6.4.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-v6.4.0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download and verify v6.4.0 artifact
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          $zip=Join-Path $env:RUNNER_TEMP 'DegreePlanner-6.4.0-Windows-x64.zip'
+          $url='https://sdmntprwestcentralus.oaiusercontent.com/files/00000000-ee3c-81fb-898c-d35b4644d0ac/raw?se=2026-08-20T17%3A14%3A00Z&sp=r&sv=2026-02-06&sr=b&scid=f698a2df-1596-50ba-b9b5-6f8e2ade111c&skoid=e9d2f8b1-028a-4cff-8eb1-d0e66fbefcca&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-08-19T23%3A39%3A36Z&ske=2026-08-20T23%3A39%3A36Z&sks=b&skv=2026-02-06&sig=J/I0TUAwJu1lWT2eJgkNhY1Gvbp0ABI85u06Y/0f7oY%3D'
+          Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
+          $zipHash=(Get-FileHash $zip -Algorithm SHA256).Hash
+          if($zipHash -ne 'CAEA114538A384FC87565EB95A3EB3D089EE4A3A4D96BD5E8D9E2126C3078F2B'){ throw "Artifact ZIP SHA-256 mismatch: $zipHash" }
+          $out=Join-Path $env:RUNNER_TEMP 'v640'
+          Expand-Archive -Path $zip -DestinationPath $out -Force
+          $setup=Join-Path $out 'DegreePlannerSetup_6.4.0_x64.exe'
+          $manifest=Join-Path $out 'latest.json'
+          if(!(Test-Path $setup) -or !(Test-Path $manifest)){ throw 'Required v6.4.0 files are missing from the artifact.' }
+          $setupHash=(Get-FileHash $setup -Algorithm SHA256).Hash
+          if($setupHash -ne '09248718800FC28B2712EF933B68080F777D886A17FD598CF3A16C9CE7A1A5F9'){ throw "Setup SHA-256 mismatch: $setupHash" }
+          $m=Get-Content $manifest -Raw -Encoding UTF8 | ConvertFrom-Json
+          if([string]$m.version -ne '6.4.0'){ throw "Manifest version mismatch: $($m.version)" }
+          if([string]$m.sha256 -ne $setupHash){ throw 'Manifest SHA-256 does not match verified installer.' }
+          Copy-Item $setup .\DegreePlannerSetup_6.4.0_x64.exe -Force
+          Copy-Item $manifest .\latest.json -Force
+      - name: Commit public update files
+        shell: powershell
+        run: |
+          git config user.name 'degreeplanner-update-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add DegreePlannerSetup_6.4.0_x64.exe latest.json
+          if(git diff --cached --quiet){ Write-Host 'Update files are already current.'; exit 0 }
+          git commit -m 'Publish Degree Planner v6.4.0 update'
+          git push
